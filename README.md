@@ -34,6 +34,85 @@ app.listen(3000, function () {
 app.use('/static',express.static(path.join(__dirname,'public')));
 ```
 
+### express路由(见router.js)
+```
+let express = require('express');
+let router = express.Router();
+
+//定义网页主站路由
+router.get('/',(req,res) => {
+    res.send('home page');
+});
+
+router.post('/add',(req,res) => {
+    res.send('add page');
+})
+
+//all() 适用于同一个路径，可以发送任意请求方式的路由
+ router.all('/select',(req,res) => {
+    res.send('all');
+}) 
+
+//use() 此路由可以匹配所有路径请求，及所有请求方式
+ router.use((req,res) => {
+    res.send('use');
+}) 
+
+//使用route() 定义路由，适用于对同一个路径发送不同请求
+ router.route('/book').get((req,res) => {
+    res.send('book-get');
+}).post((req,res) => {
+    res.send('book-post');
+}).put((req,res) => {
+    res.send('book-put');
+}).delete((req,res) => {
+    res.send('book-delete');
+}); 
+
+//导出路由
+module.exports = router;
+```
+
+### 中间件(本质是一个函数)
+
+####中间件类型
+##### 应用中间件
+##### 路由中间件
+##### 内置中间件(express.static)
+##### 第三方中间件(body-parser)
+
+#### 挂载方式
+##### app.use
+```
+app.use('/',(req,res,next) => {
+    console.log('AAA');
+    next();
+})
+```
+##### get put...
+```
+app.get('/',(req,res,next) => {
+    console.log('AAA');
+    next();
+})
+```
+#####  next('route') 可以跳过下一个中间件
+```
+app.get('/admin',(req,res,next) => {
+    console.log('A');
+    //添加参数route,可以跳过下一个中间件
+    next('route');
+},(req,res,next) => {
+    console.log('B');
+    next();
+})
+app.get('/admin',(req,res,next) => {
+    console.log('C');
+    next();
+});
+//  输出  A  C
+```
+
 ### GET请求处理表单提交
 ```
 <form action="http://127.0.0.1:3000/process_get" method="GET">
