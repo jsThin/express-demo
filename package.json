@@ -10,8 +10,10 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "art-template": "^4.13.2",
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
+    "express-art-template": "^1.0.1",
     "multer": "^1.4.1"
   }
 }

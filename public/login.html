@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>登录</title>
+</head>
+<body>
+    <form action="http://localhost:3000/login" method="get">
+        用户名: <input type="text" name="username" id="username" /><br />
+        密码:  <input type="password" name="psw" id="psw" /><br />
+        <input type="button" value="登录" id="btn"/>
+    </form> 
+    <script src="jquery-1.12.4.js"></script>
+    <script>
+        $("#btn").click(function() {
+            let obj = {
+                userName: $('#username').val(),
+                userPsw: $('#psw').val()
+            }
+            /* console.log(obj)  //{userName: "zhangsan", userPsw: "123"}
+            console.log(typeof obj);   //object
+            let obj1 = JSON.stringify(obj)   //'{"userName":"zhangsan","userPsw":"123"}'
+            console.log(obj1);    
+            console.log(typeof obj1);   //string
+            let obj2 = JSON.parse(obj1);
+            console.log(obj2);     //{userName: "zhangsan", userPsw: "123"}
+            console.log(typeof obj2);  //object */
+            $.ajax({
+                 type: "post",
+                 url: "http://localhost:3000/login",
+                 dataType: "text",
+                 contentType: 'application/json',
+                 //data: $("form:eq(0)").serialize(),
+                 data:JSON.stringify(obj), //obj是对象类型，需要转换为json字符串
+                 success: function(data) {
+                     console.log(data);
+                 }
+             });
+        });
+    </script>   
+</body>
+</html>

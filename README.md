@@ -75,7 +75,7 @@ module.exports = router;
 
 ### 中间件(本质是一个函数)
 
-####中间件类型
+#### 中间件类型
 ##### 应用中间件
 ##### 路由中间件
 ##### 内置中间件(express.static)
@@ -150,7 +150,7 @@ app.post('/process_post', urlencodedParser, function (req, res) {
        "first_name":req.body.first_name,
        "last_name":req.body.last_name
    };
-   res.end(JSON.stringify(response));
+   res.send(JSON.stringify(response));
 })
 ```
 
@@ -184,4 +184,53 @@ app.post('/file_upload',(req,res) => {
   })
 })
 ```
+
+### express整合art-template模板引擎
+##### https://github.com/aui/express-art-template
+##### 模板定义 (index.art)
+```
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>art-template模板</title>
+</head>
+<body>
+    <div>{{title}}</div>
+     <ul>
+        {{each city}}
+            <li>{{$index}}{{$value}}</li>
+        {{/each}}
+     </ul>
+</body>
+</html>
+```
+##### 渲染模板
+```
+var express = require('express');
+var app = express();
+let path = require('path');
+
+//设置模板路径
+app.set('views',path.join(__dirname,'views'));
+//设置模板引擎
+app.set('view engine','art');
+//让express兼容art-template
+app.engine('art', require('express-art-template'));
+
+app.get('/list', function (req, res) {
+    let travelData = {
+        title: '旅游城市',
+        city: ['北京','上海','广州','深圳']
+    }
+    res.render('index.art',travelData);
+})
+ 
+var server = app.listen(3000, function () {
+  console.log("app is running....");
+})
+```
+
 
